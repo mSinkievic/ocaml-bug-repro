@@ -1,0 +1,4 @@
+(executable
+ (name repro_array_slowdown)
+ (libraries domainslib mtime.clock.os)
+ )
