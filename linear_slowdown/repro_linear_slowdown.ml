@@ -5,12 +5,11 @@
  *)
 let () =
   let core_count = try int_of_string @@ Sys.argv.(1) with _ -> 0 in
-  let arr = Array.make 1000_000 0.0 in
-  let t = Mtime_clock.elapsed_ns () in
+  let arr1 = Array.make 1000_000 0.0 in
+  let arr2 = Array.make 1000_000 1.0 in
   let pool = Domainslib.Task.setup_pool ~num_additional_domains:core_count () in
   Domainslib.Task.run pool (fun () -> 
-    for i=0 to 999_999 do
-      arr.(i) <- 1.0
-    done
+    let t = Mtime_clock.elapsed_ns () in
+    Array.iteri (fun i v -> arr2.(i) <- v) arr1;
+    Printf.printf "Execution time: %fs\n" @@ Float.div (Int64.to_float @@ Int64.sub (Mtime_clock.elapsed_ns ()) t) 1000000000.;
   );
-  Printf.printf "Execution time: %fs\n" @@ Float.div (Int64.to_float @@ Int64.sub (Mtime_clock.elapsed_ns ()) t) 1000000000.;
